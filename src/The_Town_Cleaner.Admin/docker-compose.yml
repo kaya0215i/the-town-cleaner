@@ -34,7 +34,7 @@ services:
       - ./mysql:/var/lib/mysql # データベースのファイルをホスト(Windows)に保存(データ消えないようにするため)
       - ./db/my.cnf:/etc/my.cnf # MySQL設定
     ports:
-      - "3306:3306" # ホスト側ポート番号:コンテナ内ポート番号
+      - "3307:3306" # ホスト側ポート番号:コンテナ内ポート番号
     environment: # 環境変数
       - MYSQL_ROOT_PASSWORD=root # rootパスワード
       - MYSQL_DATABASE=the_town_cleaner # 使用するデータベース名
