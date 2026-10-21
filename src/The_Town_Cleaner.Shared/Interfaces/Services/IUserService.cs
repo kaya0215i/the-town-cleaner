@@ -10,6 +10,21 @@ namespace The_Town_Cleaner.Shared.Interfaces.Services {
         /// <summary>
         /// 接続テスト
         /// </summary>
-        UnaryResult<string> ConnectionTestAsync();
+        UnaryResult<bool> ConnectionTestAsync();
+
+        /// <summary>
+        /// ユーザー登録
+        /// </summary>
+        UnaryResult<int> RegistUserAsync(string name);
+
+        /// <summary>
+        /// スコア送信
+        /// </summary>
+        UnaryResult SendScoreAsync(int userId, int stageId, int score);
+
+        /// <summary>
+        /// スコア取得
+        /// </summary>
+        UnaryResult<(string, int)[]> GetScoreRankingAsync(int stageId);
     }
 }

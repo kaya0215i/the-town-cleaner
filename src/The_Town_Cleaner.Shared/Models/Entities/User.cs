@@ -14,5 +14,9 @@ namespace The_Town_Cleaner.Shared.Models.Entities {
         public int Id { get; set; }
         [Key(1)]
         public string Name { get; set; }
+        [Key(2)]
+        public DateTime Created_at { get; set; }
+        [Key(3)]
+        public DateTime Updated_at { get; set; }
     }
 }

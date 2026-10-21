@@ -18,8 +18,4 @@
     <ProjectReference Include="..\The_Town_Cleaner.Shared\The_Town_Cleaner.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\Entities\" />
-  </ItemGroup>
-
 </Project>

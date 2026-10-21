@@ -7,12 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace The_Town_Cleaner.Shared.Models.Entities {
-    [Table("stages")]
-    [MessagePackObject]
-    public class Stage {
-        [Key(0)]
+    [Table("scores")]
+    public class Score {
         public int Id { get; set; }
-        [Key(1)]
-        public string Name { get; set; }
+        public int Value { get; set; }
+        public int User_Id { get; set; }
+        public int Stage_Id { get; set; }
+        public DateTime Created_at { get; set; }
+        public DateTime Updated_at { get; set; }
     }
 }
