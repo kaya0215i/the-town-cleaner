@@ -17,6 +17,7 @@ namespace The_Town_Cleaner.Server.Services {
             _context = context;
         }
 
+        // タイムゾーン設定
         private TimeZoneInfo tokyoTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time");
 
         /// <summary>
