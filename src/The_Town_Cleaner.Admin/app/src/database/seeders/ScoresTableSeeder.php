@@ -14,9 +14,30 @@ class ScoresTableSeeder extends Seeder
     public function run(): void
     {
         Score::create([
-            'value' => 200,
+            'value' => 100,
             'user_id' => 1,
             'stage_id' => 1,
         ]);
+        Score::create([
+            'value' => 200,
+            'user_id' => 2,
+            'stage_id' => 1,
+        ]);
+        Score::create([
+            'value' => 300,
+            'user_id' => 3,
+            'stage_id' => 1,
+        ]);
+        Score::create([
+            'value' => 400,
+            'user_id' => 4,
+            'stage_id' => 1,
+        ]);
+        Score::create([
+            'value' => 500,
+            'user_id' => 5,
+            'stage_id' => 1,
+        ]);
+
     }
 }

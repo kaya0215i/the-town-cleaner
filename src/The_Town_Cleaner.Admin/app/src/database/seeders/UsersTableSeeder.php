@@ -22,5 +22,11 @@ class UsersTableSeeder extends Seeder
         User::create([
             'name' => 'Player_3',
         ]);
+        User::create([
+            'name' => 'Player_4',
+        ]);
+        User::create([
+            'name' => 'Player_5',
+        ]);
     }
 }
