@@ -97,7 +97,7 @@ namespace The_Town_Cleaner.Server.Services {
         public async UnaryResult<Ranking[]> GetScoreRankingAsync(int stageId) {
             // 存在しなかったら
             if (!await _context.Scores.AnyAsync(s => s.Stage_Id == stageId)) {
-                return Array.Empty<Ranking>();
+                throw new ReturnStatusException(Grpc.Core.StatusCode.NotFound, "ステージにスコアがありません。");
             }
 
             return await _context.Scores.Where(_ => _.Stage_Id == stageId) // ステージIdで絞り込み
