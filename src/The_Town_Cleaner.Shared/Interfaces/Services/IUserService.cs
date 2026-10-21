@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using The_Town_Cleaner.Shared.Models.Entities;
 
 namespace The_Town_Cleaner.Shared.Interfaces.Services {
     public interface IUserService : IService<IUserService>{
@@ -25,6 +26,6 @@ namespace The_Town_Cleaner.Shared.Interfaces.Services {
         /// <summary>
         /// スコア取得
         /// </summary>
-        UnaryResult<(string, int)[]> GetScoreRankingAsync(int stageId);
+        UnaryResult<Ranking[]> GetScoreRankingAsync(int stageId);
     }
 }

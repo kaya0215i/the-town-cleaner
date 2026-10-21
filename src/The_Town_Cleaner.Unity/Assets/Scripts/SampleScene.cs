@@ -15,14 +15,14 @@ public class SampleScene : MonoBehaviour
         //int userId = await UserModel.I.RegistUserAsync("Player_10");
         //Debug.Log(userId);
 
-        //await UserModel.I.SendScoreAsync(2, 500);
+        //await UserModel.I.SendScoreAsync(1, 150);
 
-        var result = await UserModel.I.GetScoreRankingAsync(1);
+        var rankings = await UserModel.I.GetScoreRankingAsync(1);
         
         string txt = "";
         
-        foreach (var item in result) {
-            txt += $"Name：{item.Item1.ToString()}, Score：{item.Item2.ToString()}\n";
+        foreach (var ranking in rankings) {
+            txt += $"Name：{ranking.name.ToString()}, Score：{ranking.score.ToString()}\n";
         }
 
         Debug.Log(txt);

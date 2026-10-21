@@ -94,10 +94,10 @@ namespace The_Town_Cleaner.Server.Services {
         /// <summary>
         /// スコアランキング取得
         /// </summary>
-        public async UnaryResult<(string, int)[]> GetScoreRankingAsync(int stageId) {
+        public async UnaryResult<Ranking[]> GetScoreRankingAsync(int stageId) {
             // 存在しなかったら
             if (!await _context.Scores.AnyAsync(s => s.Stage_Id == stageId)) {
-                return Array.Empty<(string, int)>();
+                return Array.Empty<Ranking>();
             }
 
             return await _context.Scores.Where(_ => _.Stage_Id == stageId) // ステージIdで絞り込み
@@ -110,8 +110,8 @@ namespace The_Town_Cleaner.Server.Services {
                 })
                 // 降順
                 .OrderByDescending(_ => _.score)
-                // タプル型に
-                .Select(_ => new ValueTuple<string, int>(_.name, _.score))
+                // Ranking型に
+                .Select(_=> new Ranking() { name = _.name, score = _.score})
                 // 配列にする
                 .ToArrayAsync();
         }

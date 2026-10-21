@@ -5,6 +5,7 @@ using MagicOnion.Client;
 using System;
 using System.Threading.Tasks;
 using The_Town_Cleaner.Shared.Interfaces.Services;
+using The_Town_Cleaner.Shared.Models.Entities;
 using UnityEngine;
 
 public class UserModel : Singleton<UserModel> {
@@ -60,7 +61,7 @@ public class UserModel : Singleton<UserModel> {
     /// <summary>
     /// スコアランキング取得
     /// </summary>
-    public async UniTask<(string, int)[]> GetScoreRankingAsync(int stageId) {
+    public async UniTask<Ranking[]> GetScoreRankingAsync(int stageId) {
         return await client.GetScoreRankingAsync(stageId);
     }
 }
