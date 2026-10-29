@@ -7,13 +7,6 @@ using UnityEngine;
 public class SaveManager : Singleton<SaveManager> {
     private string path = "/user.json";
 
-    private void OnDisable() {
-        SaveUserData();
-    }
-    protected override void OnDestroy() {
-        OnDisable();
-    }
-
     /// <summary>
     /// ユーザーデータ保存
     /// </summary>

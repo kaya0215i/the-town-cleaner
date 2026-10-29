@@ -10,6 +10,11 @@ using UnityEngine;
 public class SampleScene : MonoBehaviour
 {
     private async void Start() {
+
+        Debug.Log(UserModel.I.LoadSaveData());
+
+        return;
+
         await UserModel.I.CreateUserModel();
 
         User user = await UserModel.I.RegistUserAsync();

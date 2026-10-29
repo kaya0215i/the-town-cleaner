@@ -14,6 +14,11 @@ namespace The_Town_Cleaner.Shared.Interfaces.Services {
         UnaryResult<User> RegistUserAsync();
 
         /// <summary>
+        /// 名前変更
+        /// </summary>
+        UnaryResult ChangeNameAsync(int userId, string changedName);
+
+        /// <summary>
         /// スコア送信
         /// </summary>
         UnaryResult SendScoreAsync(int userId, int stageId, int score);

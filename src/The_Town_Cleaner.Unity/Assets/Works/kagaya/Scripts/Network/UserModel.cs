@@ -21,7 +21,7 @@ public class UserModel : Singleton<UserModel> {
     public string UserName { get; private set; } = string.Empty;
 
     private GrpcChannelx channelx;
-    IUserService client;
+    private IUserService client;
 
     /// <summary>
     /// MagicOnion接続処理
@@ -33,13 +33,40 @@ public class UserModel : Singleton<UserModel> {
     }
 
     /// <summary>
+    /// セーブデータからユーザー情報を読み込む
+    /// </summary>
+    public UniTask<bool> LoadSaveData() {
+        try {
+            SaveData data = SaveManager.I.LoadUserData();
+            UserId = data.id;
+            UserName = data.name;
+
+            return UniTask.FromResult<bool>(true);
+        }
+        catch {
+            return UniTask.FromResult<bool>(false);
+        }
+    }
+
+    /// <summary>
     /// ユーザー登録
     /// </summary>
     public async UniTask<User> RegistUserAsync() {
         User responseUser = await client.RegistUserAsync();
         UserId = responseUser.Id;
         UserName = responseUser.Name;
+
+        // 保存
+        SaveManager.I.SaveUserData();
+
         return responseUser;
+    }
+
+    /// <summary>
+    /// 名前変更
+    /// </summary>
+    public async UniTask ChangeNameAsync(string changedName) {
+        await client.ChangeNameAsync(UserId, changedName);
     }
 
     /// <summary>
