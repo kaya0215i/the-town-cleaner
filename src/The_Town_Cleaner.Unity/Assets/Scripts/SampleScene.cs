@@ -4,16 +4,17 @@ using Cysharp.Threading.Tasks;
 using MagicOnion;
 using MagicOnion.Client;
 using The_Town_Cleaner.Shared;
+using The_Town_Cleaner.Shared.Models.Entities;
 using UnityEngine;
 
 public class SampleScene : MonoBehaviour
 {
     private async void Start() {
         await UserModel.I.CreateUserModel();
-        UserModel.I.ConnectionTest().Forget();
 
-        //int userId = await UserModel.I.RegistUserAsync("Player_10");
-        //Debug.Log(userId);
+        User user = await UserModel.I.RegistUserAsync();
+        Debug.Log($"Id：{user.Id}\n" +
+            $"Name：{user.Name}");
 
         //await UserModel.I.SendScoreAsync(1, 150);
 

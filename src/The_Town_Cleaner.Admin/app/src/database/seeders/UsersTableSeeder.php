@@ -14,19 +14,19 @@ class UsersTableSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'name' => 'Player_1',
+            'name' => 'Player1001',
         ]);
         User::create([
-            'name' => 'Player_2',
+            'name' => 'Player1002',
         ]);
         User::create([
-            'name' => 'Player_3',
+            'name' => 'Player1003',
         ]);
         User::create([
-            'name' => 'Player_4',
+            'name' => 'Player1004',
         ]);
         User::create([
-            'name' => 'Player_5',
+            'name' => 'Player1005',
         ]);
     }
 }

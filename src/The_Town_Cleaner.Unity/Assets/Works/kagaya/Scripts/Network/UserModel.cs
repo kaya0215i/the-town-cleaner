@@ -16,7 +16,9 @@ public class UserModel : Singleton<UserModel> {
 #endif
 
     // 自分のId
-    public int UserId { get; private set; }
+    public int UserId { get; private set; } = -1;
+    // 自分の名前
+    public string UserName { get; private set; } = string.Empty;
 
     private GrpcChannelx channelx;
     IUserService client;
@@ -31,24 +33,13 @@ public class UserModel : Singleton<UserModel> {
     }
 
     /// <summary>
-    /// 接続テスト
-    /// </summary>
-    public async UniTask ConnectionTest() {
-        try {
-            bool result = await client.ConnectionTestAsync();
-            Debug.Log(result);
-        } catch (Exception e) {
-            Debug.LogException(e);
-            throw;
-        }
-    }
-
-    /// <summary>
     /// ユーザー登録
     /// </summary>
-    public async UniTask<int> RegistUserAsync(string name) {
-        UserId = await client.RegistUserAsync(name);
-        return UserId;
+    public async UniTask<User> RegistUserAsync() {
+        User responseUser = await client.RegistUserAsync();
+        UserId = responseUser.Id;
+        UserName = responseUser.Name;
+        return responseUser;
     }
 
     /// <summary>

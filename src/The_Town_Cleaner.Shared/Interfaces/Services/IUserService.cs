@@ -9,14 +9,9 @@ using The_Town_Cleaner.Shared.Models.Entities;
 namespace The_Town_Cleaner.Shared.Interfaces.Services {
     public interface IUserService : IService<IUserService>{
         /// <summary>
-        /// 接続テスト
-        /// </summary>
-        UnaryResult<bool> ConnectionTestAsync();
-
-        /// <summary>
         /// ユーザー登録
         /// </summary>
-        UnaryResult<int> RegistUserAsync(string name);
+        UnaryResult<User> RegistUserAsync();
 
         /// <summary>
         /// スコア送信

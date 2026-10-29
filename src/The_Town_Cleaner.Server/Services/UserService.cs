@@ -6,7 +6,7 @@ using The_Town_Cleaner.Shared.Interfaces.Services;
 using The_Town_Cleaner.Shared.Models.Entities;
 
 namespace The_Town_Cleaner.Server.Services {
-    public class UserService : ServiceBase<IUserService>, IUserService{
+    public class UserService : ServiceBase<IUserService>, IUserService {
         private readonly GameDbContext _context;
 
         // 排他制御用
@@ -21,32 +21,35 @@ namespace The_Town_Cleaner.Server.Services {
         private TimeZoneInfo tokyoTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time");
 
         /// <summary>
-        /// 接続テスト
+        /// 時間取得
         /// </summary>
-        public async UnaryResult<bool> ConnectionTestAsync() {
-            Console.WriteLine("接続テスト：Success");
-            return true;
+        private DateTime GetTimeNow() {
+            return TimeZoneInfo.ConvertTime(DateTime.Now, tokyoTimeZoneInfo);
         }
 
         /// <summary>
         /// ユーザー登録
         /// </summary>
-        public async UnaryResult<int> RegistUserAsync(string name) {
+        public async UnaryResult<User> RegistUserAsync() {
             //同時実行対策 ロック
             await _semaphore.WaitAsync();
 
             try {
-                // 存在したら
-                if (await _context.Users.AnyAsync(user=>user.Name == name)) {
-                    Console.WriteLine("ユーザー名が使用されています。");
-                    throw new ReturnStatusException(Grpc.Core.StatusCode.AlreadyExists, "ユーザー名が使用されています。");
+                // 名前作成
+                string userName = string.Empty;
+
+                if (await _context.Users.CountAsync() <= 0) {
+                    userName = "Player1001";
+                }
+                else {
+                    userName = "Player" + ((await _context.Users.OrderBy(user => user.Id).LastAsync()).Id + 1001).ToString();
                 }
 
                 // 作成
                 User user = new User() {
-                    Name = name,
-                    Created_at = TimeZoneInfo.ConvertTime(DateTime.Now, tokyoTimeZoneInfo),
-                    Updated_at = TimeZoneInfo.ConvertTime(DateTime.Now, tokyoTimeZoneInfo)
+                    Name = userName,
+                    Created_at = GetTimeNow(),
+                    Updated_at = GetTimeNow()
                 };
 
                 // 追加
@@ -54,7 +57,43 @@ namespace The_Town_Cleaner.Server.Services {
 
                 // 保存
                 await _context.SaveChangesAsync();
-                return user.Id;
+
+                return user;
+            }
+            finally {
+                // 解除
+                _semaphore.Release();
+            }
+        }
+
+        /// <summary>
+        /// 名前変更
+        /// </summary>
+        public async UnaryResult ChangeNameAsync(int userId, string changedName) {
+            //同時実行対策 ロック
+            await _semaphore.WaitAsync();
+
+            try {
+                // ユーザーが存在するか
+                User? user = await _context.Users.FirstOrDefaultAsync(user => user.Id == userId);
+
+                if (user == null) {
+                    Console.WriteLine("存在しないユーザーidです。");
+                    throw new ReturnStatusException(Grpc.Core.StatusCode.NotFound, "存在しないユーザーidです。");
+                }
+
+                // その名前が使われているか
+                if (await _context.Users.AnyAsync(user => user.Name == changedName)) {
+                    Console.WriteLine("ユーザー名が使用されています。");
+                    throw new ReturnStatusException(Grpc.Core.StatusCode.AlreadyExists, "ユーザー名が使用されています。");
+                }
+
+                // 適応
+                user.Name = changedName;
+                user.Updated_at = GetTimeNow();
+
+                // 保存
+                await _context.SaveChangesAsync();
             }
             finally {
                 // 解除
@@ -80,8 +119,8 @@ namespace The_Town_Cleaner.Server.Services {
                     Value = score,
                     User_Id = userId,
                     Stage_Id = stageId,
-                    Created_at = TimeZoneInfo.ConvertTime(DateTime.Now, tokyoTimeZoneInfo),
-                    Updated_at = TimeZoneInfo.ConvertTime(DateTime.Now, tokyoTimeZoneInfo)
+                    Created_at = GetTimeNow(),
+                    Updated_at = GetTimeNow()
                 };
 
                 // 登録
@@ -102,7 +141,7 @@ namespace The_Town_Cleaner.Server.Services {
             }
 
             return await _context.Scores.Where(_ => _.Stage_Id == stageId) // ステージIdで絞り込み
-                // userテーブルと結合
+                                                                           // userテーブルと結合
                 .Join(_context.Users, myScore => myScore.User_Id, user => user.Id, (myScore, user) =>
                 // 新しいテーブル作成
                 new {
@@ -112,7 +151,7 @@ namespace The_Town_Cleaner.Server.Services {
                 // 降順
                 .OrderByDescending(_ => _.score)
                 // Ranking型に
-                .Select(_=> new Ranking() { name = _.name, score = _.score})
+                .Select(_ => new Ranking() { name = _.name, score = _.score })
                 // 配列にする
                 .ToArrayAsync();
         }
